@@ -58,5 +58,14 @@ def calculate_sizes(v):
 # Runtime: O(h) 
 
 def FindDescendantOfSize(t, v):
-    # Your code goes here 
+    if t <= v.size <= 2 * t - 1:
+        return v
+
+    if v.left is not None and v.left.size >= t:
+        return FindDescendantOfSize(t, v.left)
+
+    if v.right is not None and v.right.size >= t:
+        return FindDescendantOfSize(t, v.right)
+
+    return None
     pass 
