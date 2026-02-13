@@ -134,10 +134,10 @@ class BinarySearchTree:
         pivot.left = child
 
     # right rot
-        else:  # direction == "R"
-             pivot = child.left
-             if pivot is None:
-                return self
+        else:
+            pivot = child.left
+            if pivot is None:
+               return self
 
              # rotation pointers
              child.left = pivot.right
