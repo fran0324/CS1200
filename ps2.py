@@ -53,7 +53,7 @@ class BinarySearchTree:
             return self.right.select(ind - left_size - 1)
 
 
-     def insert(self, key):
+    def insert(self, key):
         if self.key is None:
            self.key = key
            self.size = 1
