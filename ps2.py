@@ -77,7 +77,7 @@ class BinarySearchTree:
 
         return self 
        
-      def search(self, key):
+    def search(self, key):
         if self is None:
             return None
         elif self.key == key:
@@ -124,10 +124,10 @@ class BinarySearchTree:
                return self
 
     # left rot
-    if direction == "L":
-        pivot = child.right
-        if pivot is None:
-            return self
+        if direction == "L":
+           pivot = child.right
+           if pivot is None:
+              return self
 
         # rotation pointers
         child.right = pivot.left
