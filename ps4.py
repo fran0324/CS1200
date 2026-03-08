@@ -1,4 +1,3 @@
-pip install -r requirements.txt
 
 from sympy import nextprime
 import random
