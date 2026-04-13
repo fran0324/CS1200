@@ -210,21 +210,45 @@ def iset_bfs_3_coloring(G):
 # If no coloring is possible, resets all of G's colors to None and returns None.
 def sat_3_coloring(G):
     solver = Glucose3()
+    # Map (node, color) -> SAT variable number
+    # colors are 0, 1, 2
+    def var(u, c):
+        return 3 * u + c + 1   # SAT vars must start at 1
 
-    # TODO: Add the clauses to the solver
+    # 1. Each node has at least one color
+    for u in range(G.N):
+        solver.add_clause([var(u, 0), var(u, 1), var(u, 2)])
+
+    # 2. Each node has at most one color
+    for u in range(G.N):
+        for c1, c2 in combinations(range(3), 2):
+            solver.add_clause([-var(u, c1), -var(u, c2)])
+
+    # 3. Adjacent nodes cannot have the same color
+    for u in range(G.N):
+        for v in G.edges[u]:
+            if u < v:  # avoid adding the same undirected edge twice
+                for c in range(3):
+                    solver.add_clause([-var(u, c), -var(v, c)])
 
     # Attempt to solve, return None if no solution possible
     if not solver.solve():
         G.reset_colors()
         return None
 
-    # Accesses the model in form [-v1, v2, -v3 ...], which denotes v1 = False, v2 = True, v3 = False, etc.
+    # Accesses the model in form [-v1, v2, -v3 ...]
     solution = solver.get_model()
+    true_vars = set(x for x in solution if x > 0)
 
-    # TODO: If a solution is found, convert it into a coloring and update G.colors
+    # Convert SAT assignment back into a coloring
+    G.colors = [None] * G.N
+    for u in range(G.N):
+        for c in range(3):
+            if var(u, c) in true_vars:
+                G.colors[u] = c
+                break
 
     return G.colors
-
 # Feel free to add miscellaneous tests below!
 if __name__ == "__main__":
     G0 = Graph(2).add_edge(0, 1)
